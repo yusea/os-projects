@@ -17,7 +17,7 @@ sys_getprocsinfo(void)
     {
         return -1;
     }
-    return getprocsinfo(info)
+    return getprocsinfo(info);
 }
 
 int
