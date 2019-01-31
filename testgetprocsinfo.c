@@ -17,11 +17,11 @@ getprocsinfotest(){
   int procnum = getprocsinfo(info);
   if(procnum < 0)
   {
-    printf(stdout,"getprocsinfo test failed");
+    printf(stdout,"test case failed");
 	exit();
   }
   else{
-	printf(stdout, "amount of processes:%d\n", procnum);
+	printf(stdout, "processes:%d\n", procnum);
 
 	struct procinfo *in;
   	for(in = info; in < &info[procnum]; in++)
