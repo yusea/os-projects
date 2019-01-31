@@ -9,6 +9,7 @@
 #include "memlayout.h"
 #include "procinfo.h"
 
+int stdout = 1;
 
 void
 getprocsinfotest(){
@@ -16,16 +17,16 @@ getprocsinfotest(){
   int procnum = getprocsinfo(info);
   if(procnum < 0)
   {
-    printf("getprocsinfo test failed");
+    printf(stdout,"getprocsinfo test failed");
 	exit();
   }
   else{
-	printf("amount of processes:%d\n", procnum);
+	printf(stdout, "amount of processes:%d\n", procnum);
 
 	struct procinfo *in;
   	for(in = info; in < &info[procnum]; in++)
     {
-	  printf("pid:%d, name:%s\n", in->pid, in->pname);
+	  printf(stdout, "pid:%d, name:%s\n", in->pid, in->pname);
     }
 	exit();
   }
@@ -35,7 +36,7 @@ getprocsinfotest(){
 int
 main(int argc, char *argv[])
 {
-  printf("testgetprocsinfo starting\n");
+  printf(1, "testgetprocsinfo starting\n");
   getprocsinfotest();
   exit();
 }
