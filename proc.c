@@ -45,7 +45,7 @@ getprocsinfo(struct procinfo* info){
             proc_count++;
         }
     }
-    release(&ptable.lock)
+    release(&ptable.lock);
     return proc_count;
 }
 
