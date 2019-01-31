@@ -35,18 +35,18 @@ getprocsinfo(struct procinfo* info){
     int proc_count = 0;
     in = info;
     acquire(&ptable.lock);
-    for( p = ptable.proc; p < &ptable.proc[NPROC]; P++)
+    for( p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     {
         if(p->state == EMBRYO || p->state == RUNNABLE || p->state == RUNNING || p->state == SLEEPING)
         {
             in->pid = p->pid;
-            safestrcpy(in->name,p->name,16);
+            safestrcpy(in->pname,p->name,16);
             in++;
             proc_count++;
         }
     }
     release(&ptable.lock)
-    return proc_count
+    return proc_count;
 }
 
 // Must be called with interrupts disabled
