@@ -6,12 +6,15 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-#include "procinfo.h"
 
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
 } ptable;
+
+
+#include "procinfo.h"
+
 
 static struct proc *initproc;
 
