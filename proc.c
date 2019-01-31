@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "procinfo.h"
 
 struct {
   struct spinlock lock;
@@ -24,6 +25,28 @@ void
 pinit(void)
 {
   initlock(&ptable.lock, "ptable");
+}
+
+// New function: getprocsinfo
+int
+getprocsinfo(struct procinfo* info){
+    struct procinfo *in;
+    struct proc *p;
+    int proc_count = 0;
+    in = info;
+    acquire(&ptable.lock);
+    for( p = ptable.proc; p < &ptable.proc[NPROC]; P++)
+    {
+        if(p->state == EMBRYO || p->state == RUNNABLE || p->state == RUNNING || p->state == SLEEPING)
+        {
+            in->pid = p->pid;
+            safestrcpy(in->name,p->name,16);
+            in++;
+            proc_count++;
+        }
+    }
+    release(&ptable.lock)
+    return proc_count
 }
 
 // Must be called with interrupts disabled

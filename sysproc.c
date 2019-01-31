@@ -6,6 +6,19 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
+#include "procinfo.h"
+
+//project1 add sys procsinfo
+int
+sys_getprocsinfo(void)
+{
+    struct procinfo *info;
+    if(argptr(0, (void*)&info, NPROC*sizeof(*info)) < 0)
+    {
+        return -1;
+    }
+    return getprocsinfo(info)
+}
 
 int
 sys_fork(void)
