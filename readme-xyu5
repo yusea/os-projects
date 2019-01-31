@@ -1,0 +1,12 @@
+// REAMDME for PJ1
+
+1.create the procinfo strct in procinfo.c
+2.write int getprocsinfo(struct procinfo*) in proc.c
+3.write a sys edition getprocsinfo in sysproc.c
+4.link func and struct in several files, syscall.c ect.
+5.write a test in testgetprocsinfo.c
+6.Modified Makefile
+
+Just add a function of syscall, get info from ptable, //
+and does not have any change on other func and status.
+So it has small effect on overhead.
