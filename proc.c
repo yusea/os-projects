@@ -212,7 +212,7 @@ fork(void)
 
   // Allocate process.
   if((np = allocproc()) == 0){
-    panic("allocate process")
+    panic("allocate process");
     return -1;
   }
 
