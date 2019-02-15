@@ -1,3 +1,6 @@
+//
+boot xv6: make qemu
+
 // REAMDME for PJ1
 
 1.create the procinfo strct in procinfo.c
@@ -10,3 +13,8 @@
 Just add a function of syscall, get info from ptable, //
 and does not have any change on other func and status.
 So it has small effect on overhead.
+
+
+// README for pj2
+
+1.add a file testnonpointer to test if can access a non pointer(yes, if default)
