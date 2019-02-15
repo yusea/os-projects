@@ -19,12 +19,22 @@ So it has small effect on overhead.
 
 Part A: Null-pointer Dereference
 1.add a file testnonpointer to test if can access a non pointer(yes, if default).
-2.in exec.c: load an empty page at address 0 and leave it there, copy our code and data begin at the second page.
+2.In exec.c: load an empty page at address 0 and leave it there, copy our code and data begin at the second page.
 3.Makefile: change the user program' entry to 0x1000 not 0.
 4.use testnonpointer to test, can not access now.
 
 Part B: Shared Pages
+Share memory is used for different processes to communicate with each other. Each process can read or write in the share memory.
+
+
 1.In proc.h create a struct for share memory page.
-2.In proc.c in fork() and wait() map page and change the count.
+2.In proc.c in fork() and wait() map page and change the count,
+and modify allocuvm() to check the boundary not get into the share memory address.
+3.In vm.c implement shmem_access and shmem_count.
+4.In syscall.c, syscall.h, defs.h, user.h, sysproc.c, add system call sys_shmem_access and sys_shmem_count.
+5.In main.c: add the shmeminit() function in the main() to initial the share memory.
+6.Create a testfile testmemory.c to test share memory page.
+
+
 
 
