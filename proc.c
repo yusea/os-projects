@@ -19,6 +19,8 @@ static struct proc *initproc;
 int nextpid = 1;
 extern void forkret(void);
 extern void trapret(void);
+// pj2 share memory
+extern struct sharemem sharepages[];
 
 static void wakeup1(void *chan);
 
@@ -210,6 +212,7 @@ fork(void)
 
   // Allocate process.
   if((np = allocproc()) == 0){
+    panic("allocate process")
     return -1;
   }
 
@@ -218,6 +221,7 @@ fork(void)
     kfree(np->kstack);
     np->kstack = 0;
     np->state = UNUSED;
+    panic("copy process");
     return -1;
   }
   np->sz = curproc->sz;
@@ -231,6 +235,14 @@ fork(void)
     if(curproc->ofile[i])
       np->ofile[i] = filedup(curproc->ofile[i]);
   np->cwd = idup(curproc->cwd);
+  // copy share memory.
+  for(int i = 0; i < NSHAREDPG; i++){
+    if(curproc->share[i]){
+        np->share[i] = curproc->share[i];
+        mappages(np->pgdir, (char*)(KERNBASE - PGSIZE*(i+1)), PGSIZE, V2P(sharepages[i].vaddr), PTE_W|PTE_U);
+        sharepages[i].count++;
+    }
+  }
 
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
@@ -309,6 +321,11 @@ wait(void)
         continue;
       havekids = 1;
       if(p->state == ZOMBIE){
+          for(int i = 0; i < NSHAREDPG; i++){
+              if(p->share[i]){
+                  sharepages[i].count--;
+              }
+          }
         // Found one.
         pid = p->pid;
         kfree(p->kstack);

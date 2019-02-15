@@ -10,6 +10,9 @@
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
 
+// pj2 physical address to save share memory
+struct sharemem sharepages[NSHAREDPG];
+
 // Set up CPU's kernel segment descriptors.
 // Run once on entry on each CPU.
 void
@@ -57,7 +60,7 @@ walkpgdir(pde_t *pgdir, const void *va, int alloc)
 // Create PTEs for virtual addresses starting at va that refer to
 // physical addresses starting at pa. va and size might not
 // be page-aligned.
-static int
+int
 mappages(pde_t *pgdir, void *va, uint size, uint pa, int perm)
 {
   char *a, *last;
@@ -224,7 +227,7 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   char *mem;
   uint a;
 
-  if(newsz >= KERNBASE)
+  if(newsz >= KERNBASE - NSHAREDPG*PGSIZE)
     return 0;
   if(newsz < oldsz)
     return oldsz;
@@ -287,7 +290,7 @@ freevm(pde_t *pgdir)
 
   if(pgdir == 0)
     panic("freevm: no pgdir");
-  deallocuvm(pgdir, KERNBASE, 0);
+  deallocuvm(pgdir, KERNBASE-4*PGSIZE, 0);
   for(i = 0; i < NPDENTRIES; i++){
     if(pgdir[i] & PTE_P){
       char * v = P2V(PTE_ADDR(pgdir[i]));
@@ -323,7 +326,7 @@ copyuvm(pde_t *pgdir, uint sz)
   if((d = setupkvm()) == 0)
     return 0;
   // pj2
-  for(i = 0; i < sz; i += PGSIZE){
+  for(i = PGSIZE; i < sz; i += PGSIZE){
     if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
       panic("copyuvm: pte should exist");
     if(!(*pte & PTE_P))
@@ -385,6 +388,63 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
   }
   return 0;
 }
+
+// pj2 share memory initial in the main.c
+int shmeminit(){
+  char* mem;
+  for(int i = 0; i < NSHAREDPG; i++){
+    if((mem = kalloc())== 0){
+      panic("share memory allocate fail");
+      return 0;
+    }
+    sharepages[i].vaddr = mem;
+    sharepages[i].count = 0;
+    memset(mem, 0, PGSIZE);
+    cprintf("initial share memory address: %x\n", V2P(mem));
+  }
+  return 1;
+}
+
+// get share memory virtual address
+int shmem_access(int pgindex)
+{
+  if(pgindex < 0 || pgindex >= NSHAREDPG){
+    cprintf("illegal share page number\n");
+    return 0;
+  }
+  cprintf("share memory access begin\n");
+  struct sharemem *sh;
+  struct proc *curproc = myproc();
+  // if already have the share memory map, return it directly
+  if(curproc->share[pgindex])
+  {
+    cprintf("share memory have mapped so return directly\n");
+    return (int)(curproc->share[pgindex]);
+  }
+  sh = &sharepages[pgindex];
+
+  cprintf("physical address:%d", V2P(sh->vaddr));
+  mappages(curproc->pgdir, (void*)(KERNBASE-PGSIZE*(pgindex+1)), PGSIZE, V2P(sh->vaddr), PTE_W|PTE_U);
+
+  curproc->share[pgindex] = (void*)(KERNBASE - (pgindex+1)*PGSIZE);
+  sh->count++;
+  cprintf("share memory map success\n");
+
+  return (int)(KERNBASE - (pgindex+1)*PGSIZE);
+  ;
+}
+
+// get the processes number which is using share memory
+int shmem_count(int pgindex)
+{
+  struct sharemem *sh;
+  sh = &sharepages[pgindex];
+  if(sh == 0)
+    return -1;
+  return sh->count;
+
+}
+
 
 //PAGEBREAK!
 // Blank page.
