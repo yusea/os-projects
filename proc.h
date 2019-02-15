@@ -59,7 +59,7 @@ struct proc {
   char name[16];               // Process name (debugging)
   // pj2 share memory
   void* share[NSHAREDPG];      //share memory page
-};	};
+
 };
 
 // Process memory is laid out contiguously, low addresses first:
