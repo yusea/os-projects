@@ -1,5 +1,11 @@
-//
-boot xv6: make qemu
+// basic command for xv6 and qemu
+
+make      (this will build xv6 systerm into two .img disk-image file for virtual machine:emulator read)
+make qemu        (this will build and run qemu with xv6 disk-image file) (with x window(gui))
+
+make quemu-nox      (will not show gui window, just runs in the terninmal)  
+ctrl-a x      (quit qemu, which means sametime press control+a then release and press x)
+ctrl-a h      (qemu help file, more info see https://qemu.weilnetz.de/doc/qemu-doc.html )
 
 // REAMDME for PJ1
 
@@ -16,7 +22,6 @@ So it has small effect on overhead.
 
 
 // README for pj2
-
 Part A: Null-pointer Dereference
 1.add a file testnonpointer to test if can access a non pointer(yes, if default).
 2.In exec.c: load an empty page at address 0 and leave it there, copy our code and data begin at the second page.
@@ -34,6 +39,17 @@ and modify allocuvm() to check the boundary not get into the share memory addres
 4.In syscall.c, syscall.h, defs.h, user.h, sysproc.c, add system call sys_shmem_access and sys_shmem_count.
 5.In main.c: add the shmeminit() function in the main() to initial the share memory.
 6.Create a testfile testmemory.c to test share memory page.
+
+
+// README for pj3
+
+1.Create threads based on proc structure, add flag "isthresd" to tell it's a thread or just process.
+2.Implement clone to create thread in process, and join for a thread to finish and return.(and adjust wait())
+3.Create sys clone and join.
+4.set up  struct kthread thread_create(void (*start_routine)(void*), void *arg) and thread_join(struct kthread).
+5.Adjust corresponding syscall, user, usys , defs and Makefile.
+
+
 
 
 

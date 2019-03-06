@@ -59,6 +59,9 @@ struct proc {
   char name[16];               // Process name (debugging)
   // pj2 share memory
   void* share[NSHAREDPG];      //share memory page
+  // pj3 threads
+  int isthread;
+  void* ustack;
 
 };
 

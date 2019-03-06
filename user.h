@@ -1,6 +1,8 @@
 struct stat;
 struct rtcdate;
 struct procinfo;
+struct lock_t;
+struct kthread_t;
 
 // system calls
 int fork(void);
@@ -27,6 +29,9 @@ int uptime(void);
 int getprocsinfo(struct procinfo*);
 int shmem_access(int);
 int shmem_count(int);
+int clone(void(*fcn)(void*), void *arg, void *stack);
+int join(int pid);
+
 
 // ulib.c
 int stat(const char*, struct stat*);
@@ -41,3 +46,9 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+// pj3 thread
+void init_lock(struct lock_t* lk);
+void lock_acquire(struct lock_t* lk);
+void lock_release(struct lock_t* lk); 
+struct kthread_t thread_create(void(*start_routine)(void*), void *arg);
+int thread_join(struct kthread_t ktd);

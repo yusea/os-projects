@@ -38,6 +38,30 @@ sys_shmem_count(void)
   return shmem_count(pgindex);
 }
 
+// pj3 create a thread
+int 
+sys_clone(void)
+{
+  char* fcn = 0;
+  char* arg = 0;
+  char* stack = 0;
+  if(argptr(0, &fcn, sizeof(char*)) < 0 || argptr(1, &arg, sizeof(char*)) < 0 || argptr(2, &stack, PGSIZE) < 0){
+    return -1;
+  }
+  return clone((void*)fcn, (void*)arg, (void*)stack);
+}
+
+// thread to join
+int
+sys_join(void)
+{
+  int pid;
+  if(argint(0, &pid) < 0){
+    return -1;
+  }
+  return join(pid);
+}
+
 
 int
 sys_fork(void)
