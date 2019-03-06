@@ -1,6 +1,6 @@
 // basic command for xv6 and qemu
 
-make      (this will build xv6 systerm into two .img disk-image file for virtual machine:emulator read)
+make      (this will build xv6 systerm into two .img disk-image file for virtual machine&emulator read)
 make qemu        (this will build and run qemu with xv6 disk-image file) (with x window(gui))
 
 make quemu-nox      (will not show gui window, just runs in the terninmal)  
@@ -45,8 +45,8 @@ and modify allocuvm() to check the boundary not get into the share memory addres
 
 1.Create threads based on proc structure, add flag "isthresd" to tell it's a thread or just process.
 2.Implement clone to create thread in process, and join for a thread to finish and return.(and adjust wait())
-3.Create sys clone and join.
-4.set up  struct kthread thread_create(void (*start_routine)(void*), void *arg) and thread_join(struct kthread).
+3.Create sys clone and join based on clone and join.
+4.Creare kthread file and set up  struct kthread thread_create(void (*start_routine)(void*), void *arg) and thread_join(struct kthread).
 5.Adjust corresponding syscall, user, usys , defs and Makefile.
 
 
