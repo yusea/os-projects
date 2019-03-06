@@ -133,7 +133,7 @@ static int (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_getprocsinfo] sys_getprocsinfo,
 [SYS_shmem_access] sys_shmem_access,
-[SYS_shmem_count] sys_shmem_count
+[SYS_shmem_count] sys_shmem_count,
 [SYS_clone]    sys_clone,
 [SYS_join]     sys_join,
 
