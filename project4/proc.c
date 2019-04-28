@@ -598,19 +598,6 @@ procdump(void)
   }
 }
 
-// Set the priority of the current process with given value.
-int 
-setpri(int num)
-{
-  if (num < 1 || num > 2)
-    return -1;
-
-  struct proc *curproc = myproc();
-  curproc->priority = num;
-  return 0;
-}
-
-// Get some basic information about each running process.
 int 
 getpinfo(struct pstat* pinfo)
 {
@@ -633,3 +620,16 @@ getpinfo(struct pstat* pinfo)
   release(&ptable.lock);
   return 0;
 }
+
+int 
+setpri(int num)
+{
+  if (num < 1 || num > 2)
+    return -1;
+
+  struct proc *curproc = myproc();
+  curproc->priority = num;
+  return 0;
+}
+
+
