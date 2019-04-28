@@ -121,7 +121,8 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 int             setpri(int);
-void            setproc(struct proc*);
+int             getpinfo(struct pstat*);
+
 
 // swtch.S
 void            swtch(struct context**, struct context*);
