@@ -66,8 +66,8 @@ titan5}.computing.clemson.edu,
 
 Part A:
 1.use a original clean xv6 version 
-2.modify proc.c
-3.modify usr.h and Makefile
+2.add setpri(int) setproc(struct proc*) in proc.c
+3.modify usr.h sysproc.c syscall.c syscall.h defs.h usys.S and Makefile 
 
 
 
