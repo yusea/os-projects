@@ -1,0 +1,76 @@
+// basic command for xv6 and qemu
+
+make      (this will build xv6 systerm into two .img disk-image file for virtual machine&emulator read)
+make qemu        (this will build and run qemu with xv6 disk-image file) (with x window(gui))
+
+make quemu-nox      (will not show gui window, just runs in the terninmal)  
+ctrl-a x      (quit qemu, which means sametime press control+a then release and press x)
+ctrl-a h      (qemu help file, more info see https://qemu.weilnetz.de/doc/qemu-doc.html )
+
+// REAMDME for PJ1
+
+1.create the procinfo strct in procinfo.c
+2.write int getprocsinfo(struct procinfo*) in proc.c
+3.write a sys edition getprocsinfo in sysproc.c
+4.link func and struct in several files, syscall.c ect.
+5.write a test in testgetprocsinfo.c
+6.Modified Makefile
+
+Just add a function of syscall, get info from ptable, //
+and does not have any change on other func and status.
+So it has small effect on overhead.
+
+
+// README for pj2
+Part A: Null-pointer Dereference
+1.add a file testnonpointer to test if can access a non pointer(yes, if default).
+2.In exec.c: load an empty page at address 0 and leave it there, copy our code and data begin at the second page.
+3.Makefile: change the user program' entry to 0x1000 not 0.
+4.use testnonpointer to test, can not access now.
+
+Part B: Shared Pages
+Share memory is used for different processes to communicate with each other. Each process can read or write in the share memory.
+
+
+1.In proc.h create a struct for share memory page.
+2.In proc.c in fork() and wait() map page and change the count,
+and modify allocuvm() to check the boundary not get into the share memory address.
+3.In vm.c implement shmem_access and shmem_count.
+4.In syscall.c, syscall.h, defs.h, user.h, sysproc.c, add system call sys_shmem_access and sys_shmem_count.
+5.In main.c: add the shmeminit() function in the main() to initial the share memory.
+6.Create a testfile testmemory.c to test share memory page.
+
+
+// README for pj3
+
+1.Create threads based on proc structure, add flag "isthresd" to tell it's a thread or just process.
+2.Implement clone to create thread in process, and join for a thread to finish and return.(and adjust wait())
+3.Create sys clone and join based on clone and join.
+4.Creare kthread file and set up  struct kthread thread_create(void (*start_routine)(void*), void *arg) and thread_join(struct kthread).
+5.Adjust corresponding syscall, user, usys , defs and Makefile.
+
+
+
+// README for pj4
+
+Part A: xv6 scheduler: to be done in xv6 OS environment.
+Part B: File System:
+1. file system checker: to be done on the lab machines, so you can
+learn more about programming in C on a typical UNIX-based
+platform (Linux). Remote users can ssh to the following
+machines: newton.computing.clemson.edu, {titan1, titan2, ...
+titan5}.computing.clemson.edu,
+{joey1,..,joey20}.computing.clemson.edu.
+2. File system integrity: to be done in the xv6 environment.
+
+
+Part A:
+1.use a original clean xv6 version 
+2.modify proc.c
+3.modify usr.h and Makefile
+
+
+
+
+
+
