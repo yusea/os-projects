@@ -50,9 +50,8 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
   int priority;                // Priority
-  uint sched_time;             // Time when we started running
+  int lop_ticks;              // Time spent in low priority
   uint hip_ticks;              // Time spent in high priority
-
   uint sched_time;             // Time when we started running
 };
 
