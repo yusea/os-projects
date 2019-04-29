@@ -367,7 +367,7 @@ int main(int argc, char *argv[]) {
   uchar buf[BSIZE];
   rsect(SUPERBLOCK, buf);
   memmove(&sb, buf, sizeof(sb));
-  printf("superblock size: %d, superblock nblocks: %d, superblock ninodes:%d, superblock nlog: %d\n, superblock logstart: %d, superblock inodestart: %d, superblock bmapstart: %d\n",sb.size, sb.nblocks, sb.ninodes, sb.nlog, sb.logstart, sb.inodestart, sb.bmapstart); 
+  printf("superblock size: %d, superblock nblocks: %d, superblock ninodes:%d, superblock nlog: %d,\n superblock logstart: %d, superblock inodestart: %d, superblock bmapstart: %d\n",sb.size, sb.nblocks, sb.ninodes, sb.nlog, sb.logstart, sb.inodestart, sb.bmapstart); 
   rsect(sb.bmapstart, &buf);
   
 
