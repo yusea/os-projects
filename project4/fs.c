@@ -413,7 +413,6 @@ readi(struct inode *ip, char *dst, uint off, uint n)
         if((ip->addrs[i] & 0x00ffffff)== block){
           isfind = 1;
           addr = ip->addrs[i];
-cprintf("%d, %d\n", ip->addrs[i], block);
           break;
         }
       }

@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
   struct stat mystat;
   struct stat * ptr = &mystat;
   stat(argv[1], ptr);
-  printf(1, "file type is: %d\n, file size is: %d\n, file checksum is: %d\n", ptr->type, ptr->size, (uchar)ptr->checksum);
+  printf(1, "file type is: %d\nfile size is: %d\nfile checksum is: %d\n", ptr->type, ptr->size, (uchar)ptr->checksum);
   exit();
   return 0; 
 }

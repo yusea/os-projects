@@ -56,15 +56,13 @@ int checkaddrvalid()
 {
   uint maxnum = sb.size - 1; 
   uint minnum = BBLOCK(sb.size, sb); 
- 
   for(int i = 0; i < sb.ninodes; i++){
-    rinode(i, &in);
+    rinode(i, &in);s
     for(int j = 0; j < NDIRECT + 1; j++){
       if(in.addrs[j] != 0 && (in.addrs[j] < minnum || in.addrs[j] > maxnum)){
         return -1;
       }
     }
-   
     if(in.addrs[NDIRECT] != 0){
       char buf[BSIZE];
       rsect(in.addrs[NDIRECT], buf);
