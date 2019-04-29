@@ -159,6 +159,9 @@ _forktest: forktest.o $(ULIB)
 mkfs: mkfs.c fs.h
 	gcc -Werror -Wall -o mkfs mkfs.c
 
+fscheck: fscheck.c fs.h 
+	gcc fscheck.c -o fscheck
+
 # Prevent deletion of intermediate files, e.g. cat.o, after first build, so
 # that disk image changes after first build are persistent until clean.  More
 # details:
@@ -179,9 +182,11 @@ UPROGS=\
 	_sh\
 	_stressfs\
 	_usertests\
+	_testfsintegrity\
 	_wc\
 	_zombie\
 	_testpriority\
+	_filestat\
 	$(CL_UPROGS)\
 
 fs.img: mkfs README $(UPROGS)
@@ -252,7 +257,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
 EXTRA=\
 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
-	printf.c umalloc.c testpriority.c\
+	printf.c umalloc.c testpriority.c filestat.c testintegrity.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
 	.gdbinit.tmpl gdbutil\
 	$(CL_EXTRA)\
