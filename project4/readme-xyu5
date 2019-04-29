@@ -95,8 +95,7 @@ differently for files with checksums. Check and make sure the block still matche
 
 3.modify the stat() system call to dump some information about the file. 
 
-I implement and modify mainly in fs.c and fs.h.
-Also,a test called testFSI are create to test the File System Integrity.
+I implement and modify mainly in fs.c and fs.h. Filestat program print out all the information about a file, including its type, size, and checksum value, are in filestat.c. Also,a test called testFSI are create to test the File System Integrity.
 
 Usage:
 In qemu xv6 systerm,
