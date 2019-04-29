@@ -65,11 +65,45 @@ titan5}.computing.clemson.edu,
 
 
 Part A:
-1.use a original clean xv6 version 
-2.add setpri(int) setproc(struct proc*) in proc.c
+1.use a original clean xv6 version from git
+2.add setpri(int) getpinfo(struct pstat* ) in proc.c and adjust allocproc to init priority and lo/hi time.
 3.modify usr.h sysproc.c syscall.c syscall.h defs.h usys.S and Makefile 
 
+usage:
+In qemu xv6 systerm,
+testpriority
 
+Part B:
+B1:
+Implement a checker which reads in a file system image and makes sure that it is consistent. The file fs.h includes the basic structures which is boot block, super block, log, inode blocks, bitmap, data blocks.
+
+1.implement fscheck in fscheck.c. Based on 12 rules mentioned in the requirement.
+2.modify related file, and add fschech to Makefile
+
+Usage (from Makefile):
+make fscheck
+./fscheck *.img
+
+B2:
+Changing the existing xv6 file system to add protection
+from data corruption. In real storage systems, silent corruption of data is a major concern, and thus many techniques are usually put in place to detect (and recover) from blocks that go bad.
+
+1.modify the code to allow creating a new type of file that keeps a checksum for every block it points to. 
+
+2.Change the file system to handle reads and writes
+differently for files with checksums. Check and make sure the block still matches the stored checksum, returning an error code (-1) if not.
+
+3.modify the stat() system call to dump some information about the file. 
+
+I implement and modify mainly in fs.c and fs.h.
+Also,a test called testFSI are create to test the File System Integrity.
+
+Usage:
+In qemu xv6 systerm,
+testFSI FILE_PATH
+
+and information about FILE_PATH, simple use 
+filestat FILE_PATH
 
 
 

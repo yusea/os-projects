@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <assert.h>
 
-#define stat xv6_stat  // avoid clash with host struct stat
+#define stat xv6_stat  
 #include "types.h"
 #include "fs.h"
 #include "stat.h"
@@ -13,7 +13,7 @@
 
 int fsfd;
 struct superblock sb;
-//struct dinode ind;
+
 void
 rsect(uint sec, void *buf)
 {
@@ -39,12 +39,10 @@ rinode(uint inum, struct dinode *ip)
   *ip = *dip;
 }
 
-
-// check 1: Each inode is either unallocated or one of the valid types (T_FILE, T_DIR, T_DEV)
-int checkinodetype()//struct superblock *sb)
+int checkinodetype()
 {
   struct dinode in;
-  // for loop the inodes to find the bad inode
+
   for(int num = 0; num < sb.ninodes; num++) {
     rinode(num, &in);
     if(in.type != 0 && in.type != T_DIR && in.type != T_FILE && in.type != T_DEV) {
@@ -53,13 +51,12 @@ int checkinodetype()//struct superblock *sb)
   }
   return 1;
 }
-// check 2: For in-use inodes, each address that is used by inode is valid (points to a valid datablock address within the image). Note: must check indirect blocks too, when they are in use.
+
 int checkaddrvalid()
 {
-  uint maxnum = sb.size - 1; // address should small than maxnum
-  uint minnum = BBLOCK(sb.size, sb); // address should bigger than minnum
-  struct dinode in;
-  // for loop the inodes to check each inode address
+  uint maxnum = sb.size - 1; 
+  uint minnum = BBLOCK(sb.size, sb); 
+ 
   for(int i = 0; i < sb.ninodes; i++){
     rinode(i, &in);
     for(int j = 0; j < NDIRECT + 1; j++){
@@ -67,7 +64,7 @@ int checkaddrvalid()
         return -1;
       }
     }
-    // deal with the indirect file block to check the address
+   
     if(in.addrs[NDIRECT] != 0){
       char buf[BSIZE];
       rsect(in.addrs[NDIRECT], buf);
@@ -83,7 +80,6 @@ int checkaddrvalid()
   return 1;
 }
 
-// check 3: root directory exist and its inode number is 1.
 int checkrootexist()
 {
   struct dinode in;
@@ -133,7 +129,7 @@ int getinum(uint inum, char *name)
   return -1;
 }
 
-// check 4: each directory contains . and ..
+
 int checkdirformat(char *name)
 {
   struct dinode in;
@@ -147,7 +143,7 @@ int checkdirformat(char *name)
   }
   return 1; 
 }
-// check 5: Each .. entry in directory refers to the proper parent inode, and parent inode points back to it
+
 int checkparent()
 {
   struct dinode in; 
@@ -196,7 +192,7 @@ int checkparent()
   }
   return 1;  
 }
-// check if the block num used in inode mark in bitmap
+
 int getbit(uint addr)
 {
   uchar buf[BSIZE];
@@ -213,8 +209,6 @@ int getbit(uint addr)
     return -1;
   }
 }
-
-// check 6: For in-use inodes, each address in use is also marked in use in the bitmap
 
 
 int checkbitmap(uint addresses[])
@@ -252,7 +246,7 @@ int checkbitmap(uint addresses[])
   return 1;
 }
 
-//check 7: For blocks marked in-use in bitmap, actually is in-use in an inode or indirect block somewhere
+
 int checkblockuse(uint addresses[])
 {
   uchar buf[BSIZE];
@@ -272,7 +266,6 @@ int checkblockuse(uint addresses[])
   return 1;
 }
 
-//check 8: For in-use inodes, any address in use is only used once
 int checkusetime(uint addresses[])
 {
   for(uint i = 0; i < sb.size; i++){
@@ -283,7 +276,7 @@ int checkusetime(uint addresses[])
   return 1;
 }
 
-//check 9: For inodes marked used in inode table, must be referred to in at least one directory.
+
 int checkinoderef(uint inodes[])
 {
   struct dinode in;
@@ -337,7 +330,7 @@ int checkinoderef(uint inodes[])
   }
   return 1;
 }
-//check 10: For inode numbers referred to in a valid directory, actually marked in use in inode table
+
 int checkinodemark(uint inodes[])
 {
   struct dinode in;
@@ -353,7 +346,6 @@ int checkinodemark(uint inodes[])
   return 1;
 }
 
-// check 11: Reference counts (number of links) for regular files match the number of times file is referred to in directories (i.e., hard links work correctly).
 int checklinks(uint inodes[])
 { 
   struct dinode in;
@@ -369,7 +361,6 @@ int checklinks(uint inodes[])
   return 1;
 }
 
-// check 12: No extra links allowed for directories (each directory only appears in one other directory)
 int checkdirref(uint inodes[])
 {
   struct dinode in;
